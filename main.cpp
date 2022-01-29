@@ -2,53 +2,64 @@
 //  main.cpp
 //  CUhackit_plannter
 //
-//  Created by Joseph  Suter on 1/29/22.
+//  Created by Joseph Suter, Rich Bozard,  Aman Garlapati on 1/29/22.
 //
 #include <iostream>
-#include <chrono>
-#include <thread>
+#include "Timer.h"
 using namespace std;
 
-void timer(int hours, int min, int sec);
+struct CLOCK {
+    int hours;
+    int minutes;
+    int seconds;
+};
 
-//Timer function
-void timer(int hours, int min, int sec){
-    for(;;){ //infinite loop
-        if(hours == 0 && min == 0 && sec == 0){
-            break;
-        }
-        if(sec == 0 && min == 0){
-            min = 60;
-            hours--;
-        }jj
-        if(sec == 0){
-            sec = 60;
-            min--;
-        }
-        this_thread::sleep_for(chrono::milliseconds(1000));
-        cout << hours << ":" << min << ":" << sec-- << endl;
-    }
-}
+void timeDifference(struct CLOCK, struct CLOCK, struct CLOCK *);
 
-int main(int argc, const char * argv[]) {
-    
-    // Sets Users Name
+int main() {
+    /*    // Sets Users Name
     string userName;
     cout << "Please enter name: ";
     getline(cin, userName);
-    cout << userName + "\n";
+    cout << userName << endl;
+    */
     
-    //Tester code
+    //Set Wake and Sleep times
+    
+    struct CLOCK wakeup, sleep, activeHours;
+    
+    cout << "What time do you wake up (Hours min seconds): " << endl;
+    cin >> wakeup.hours >> wakeup.minutes >> wakeup.seconds;
+    cout << "What time do you go to sleep (PM): " << endl;
+    cin >> sleep.hours >> sleep.minutes >> sleep.seconds;
+    timeDifference (wakeup, sleep, &activeHours);
+    
+    cout << activeHours.hours << ":" << activeHours.minutes << ":" << activeHours.seconds;
+    cout << endl;
+    
+    /*
+     //Timer inputs
     int hours, min, sec;
     cout << "Please set a timer for the act:\n";
     cout << "Hours: "; cin >> hours;
     cout << "Minutes: "; cin >> min;
     cout << "Seconds: ";  cin >> sec;
     timer(hours, min, sec);
-    
-    
-    
-    
+     
+     */
     return 0;
 }
-
+void timeDifference(struct CLOCK wakeup, struct CLOCK sleep, struct CLOCK *activeHours){
+    sleep.hours += 12;
+    if(wakeup.seconds > sleep.seconds){
+        --sleep.minutes;
+        sleep.seconds += 60;
+    }
+    activeHours->seconds = sleep.seconds - wakeup.seconds;
+    if(wakeup.minutes > sleep.minutes){
+        --sleep.hours;
+        sleep.minutes += 60;
+    }
+    activeHours->minutes = sleep.minutes - wakeup.minutes;
+    activeHours->hours = sleep.hours - wakeup.hours;
+}
