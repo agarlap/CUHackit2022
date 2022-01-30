@@ -15,82 +15,85 @@
 #include <fstream>
 using namespace std;
 
-
-
-//Clock struct
-struct CLOCK {
-    int hours;
-    int minutes;
-    int seconds;
-};
-
-//Tasks struct
-struct TASKS{
-    string title;
-    int priorty;
-    struct CLOCK duration;
-};
-
-void timeDifference(struct CLOCK, struct CLOCK, struct CLOCK *);
-
-
-
-
 int main() {
+    
     // Sets Users Name
     string userName;
     cout << "Please enter name: ";
     getline(cin, userName);
     cout << userName << endl;
     
-    //Set Wake and Sleep times
+    //Set Week up
     struct CLOCK wakeup, sleep, activeHours;
     
-    cout << "What time do you wake up (Hours min seconds): " << endl;
+    cout << "What time do you start your day (Hours min seconds): " << endl;
     cin >> wakeup.hours >> wakeup.minutes >> wakeup.seconds;
     
-    cout << "What time do you go to sleep (PM): " << endl;
+    cout << "AM or PM?: ";
+    cin >> wakeup.AMPM1;
+    
+    
+    cout << "What time do you end your day: " << endl;
     cin >> sleep.hours >> sleep.minutes >> sleep.seconds;
+    
+    cout << "AM or PM: ";
+    cin >> sleep.AMPM2;
     
     timeDifference (wakeup, sleep, &activeHours);
     
     //Display activeHours
-    cout << activeHours.hours << ":" << activeHours.minutes << ":" << activeHours.seconds;
+    cout << "Daily hours " << activeHours.hours << ":" << activeHours.minutes << ":" << activeHours.seconds;
     cout << endl;
     
+    double  workSeconds = (activeHours.hours * 3600) + (activeHours.minutes * 60) + (activeHours.seconds);
+    double workWeekHours = (workSeconds * 5)/3600;
+    cout << "Weekly Hours " << workWeekHours;
+    cout << endl;
     
     //Task Array
-    int taskNum = 0;
-    TASKS array[taskNum];
+//    int taskNum = 0;
+    int currenttasknum = 0;
+    int maxtasknum = 25;
+    //string TaskArray[taskNum];
+    struct TASKS TaskArray[maxtasknum];
     
+    int x = 0;
+    while(x != 1){
+        int choice = 0;
+        choice = printMenu(choice);
+        if(choice == 1){
+                struct TASKS taskname, urgency, workTime,  today,  dueday;
+ //               taskNum += 1;
+                cout << "enter the name of the task:";
+                cout << endl;
+            cin >> taskname.name;
+                cout << "enter urgency of task" << endl;
+                cin >> urgency.priorty;
+                cout << "enter time estimated duration of task: ";
+                cin >> workTime.duration;
+                cout << "enter the current day: " << endl;
+                cin >> today.currentDay;
+                cout << "enter the day task must be done:" << endl;
+                cin >> dueday.dueDay;
+                
+                //TaskArray[taskNum] = {taskname.name,urgency.priorty,workTime.duration, today.currentDay, dueday.dueDay};
+                TaskArray[currenttasknum].name = taskname.name;
+                TaskArray[currenttasknum].priorty = taskname.priorty;
+                TaskArray[currenttasknum].duration = taskname.duration;
+                TaskArray[currenttasknum].currentDay = taskname.currentDay;
+                TaskArray[currenttasknum].dueDay = taskname.dueDay;
+                
+                currenttasknum += 1;
+            }
+            else if (choice == 2){
+                for(int i = 0; i < currenttasknum; i ++){
+                    cout << TaskArray[i].priorty;
+                }
+            }
+        
+        
+        
+    } //Ends while loop
     
-    //Menu
-    
-    
-    
-    /*
-     //Timer inputs
-    int hours, min, sec;
-    cout << "Please set a timer for the act:\n";
-    cout << "Hours: "; cin >> hours;
-    cout << "Minutes: "; cin >> min;
-    cout << "Seconds: ";  cin >> sec;
-    timer(hours, min, sec);
-     
-     */
     return 0;
-}
-void timeDifference(struct CLOCK wakeup, struct CLOCK sleep, struct CLOCK *activeHours){
-    sleep.hours += 12;
-    if(wakeup.seconds > sleep.seconds){
-        --sleep.minutes;
-        sleep.seconds += 60;
-    }
-    activeHours->seconds = sleep.seconds - wakeup.seconds;
-    if(wakeup.minutes > sleep.minutes){
-        --sleep.hours;
-        sleep.minutes += 60;
-    }
-    activeHours->minutes = sleep.minutes - wakeup.minutes;
-    activeHours->hours = sleep.hours - wakeup.hours;
 }
